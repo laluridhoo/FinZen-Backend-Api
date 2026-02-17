@@ -3,14 +3,21 @@
   "version": "1.0.0",
   "description": "A TypeScript project",
   "main": "dist/app.js",
+  "prisma": {
+    "schema": "src/prisma/schema.prisma",
+    "seed": "ts-node src/prisma/seed.ts"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/app.js",
     "dev": "ts-node src/app.ts",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
-    "db:generate": "prisma generate --schema=src/prisma/schema.prisma",
-    "db:push": "prisma db push --schema=src/prisma/schema.prisma"
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "seed data dummy"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
