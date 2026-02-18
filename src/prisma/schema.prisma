@@ -27,6 +27,7 @@ model Transaction {
   description String?
   date        DateTime @default(now())
   type        String   // 'income' or 'expense'
+  category    String? 
   userId      Int
   user        User     @relation(fields: [userId], references: [id])
 }
