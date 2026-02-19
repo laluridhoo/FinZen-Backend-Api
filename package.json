@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/app.js",
-    "dev": "ts-node src/app.ts",
+    "dev": "nodemon --exec ts-node src/server.ts",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
     "db:generate": "prisma generate",
@@ -20,16 +20,19 @@
     "db:seed": "seed data dummy"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "^20.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.0.0",
+    "nodemon": "^3.1.11",
     "prisma": "^5.0.0",
-    "ts-node": "^10.0.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.0.0"
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",
-    "dotenv": "^17.2.4"
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1"
   }
 }
