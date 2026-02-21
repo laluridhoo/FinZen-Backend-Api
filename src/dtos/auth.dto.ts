@@ -4,7 +4,7 @@
 export interface RegisterRequest {
   email: string;
   password: string;
-  name?: string; // opsional, sesuai schema User
+  name?: string; 
 }
 
 /**
