@@ -1,6 +1,15 @@
 import type { Request, Response } from "express";
-import { register as registerService } from "../services/auth.service";
-import type { RegisterRequest, RegisterResponse, ApiResponse } from "../dtos/auth.dto";
+import {
+  register as registerService,
+  login as loginService,
+} from "../services/auth.service";
+import type {
+  RegisterRequest,
+  RegisterResponse,
+  LoginRequest,
+  LoginResponse,
+  ApiResponse,
+} from "../dtos/auth.dto";
 
 /**
  * Controller: Register - Menangani HTTP request untuk registrasi user baru
@@ -72,5 +81,41 @@ export async function register(
       success: false,
       message: "Terjadi kesalahan pada server",
     });
+  }
+}
+
+export async function login(
+  req: Request<unknown, unknown, LoginRequest>,
+  res: Response<ApiResponse<LoginResponse>>
+): Promise<void> {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      res.status(400).json({ success: false, message: "Email dan password harus diisi" });
+      return;
+    }
+
+    const result = await loginService({ email, password });
+
+    res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Terjadi kesalahan pada server";
+
+    if (errorMessage === "Invalid credentials") {
+      res.status(401).json({ success: false, message: "Email atau password salah" });
+      return;
+    }
+
+    if (
+      errorMessage.includes("tidak valid") ||
+      errorMessage.includes("minimal") ||
+      errorMessage.includes("Invalid")
+    ) {
+      res.status(400).json({ success: false, message: errorMessage });
+      return;
+    }
+
+    res.status(500).json({ success: false, message: "Terjadi kesalahan pada server" });
   }
 }

@@ -1,7 +1,13 @@
 import { isEmail } from "validator";
 import { prisma } from "../config/database";
-import type { RegisterRequest, RegisterResponse } from "../dtos/auth.dto";
-import { hashPassword } from "../utils/password";
+import type {
+  RegisterRequest,
+  RegisterResponse,
+  LoginRequest,
+  LoginResponse,
+} from "../dtos/auth.dto";
+import { hashPassword, comparePassword } from "../utils/password";
+import { signToken } from "../utils/jwt";
 
 const PASSWORD_MIN_LENGTH = 8;
 
@@ -42,5 +48,38 @@ export async function register(data: RegisterRequest): Promise<RegisterResponse>
     name: user.name,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
+  };
+}
+
+/**
+ * Business logic untuk login
+ * - Cari user berdasarkan email
+ * - Bandingkan password
+ * - Jika valid, generate JWT dan kembalikan token + user
+ */
+export async function login(data: LoginRequest): Promise<LoginResponse> {
+  const user = await prisma.user.findUnique({ where: { email: data.email } });
+
+  // Jangan beri tahu apakah email tidak ada, gunakan pesan kredensial umum
+  if (!user) {
+    throw new Error("Invalid credentials");
+  }
+
+  const match = await comparePassword(data.password, user.passwordHash);
+  if (!match) {
+    throw new Error("Invalid credentials");
+  }
+
+  const token = signToken({ userId: user.id });
+
+  return {
+    token,
+    user: {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    },
   };
 }
