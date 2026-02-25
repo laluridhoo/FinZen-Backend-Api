@@ -1,12 +1,7 @@
 import jwt from "jsonwebtoken";
+import { getJwtSecret } from "../config/env";
 
 const DEFAULT_EXPIRES_IN = "1h";
-
-function getJwtSecret(): string {
-  const secret = process.env.JWT_SECRET;
-  if (!secret) throw new Error("JWT_SECRET is not set in environment");
-  return secret;
-}
 
 export function signToken(payload: object, expiresIn = DEFAULT_EXPIRES_IN): string {
   return jwt.sign(payload, getJwtSecret(), { expiresIn });
