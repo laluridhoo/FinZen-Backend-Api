@@ -1,5 +1,4 @@
 import express, { Request, Response } from "express";
-import authRouter from "./routes/auth.route";
 
 export const app = express();
 const port = 3000;
