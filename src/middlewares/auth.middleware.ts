@@ -1,14 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyToken } from "../utils/jwt";
-
-interface JwtPayload {
-  sub?: string | number;
-  id?: number;
-  email?: string;
-  roles?: string[];
-  iat?: number;
-  exp?: number;
-}
+import { JwtPayload } from "../dtos/auth.dto";
 
 /**
  * Middleware authenticate
@@ -36,7 +28,6 @@ export function authenticate(req: Request, res: Response, next: NextFunction) {
     req.user = {
       id: payload.sub ? Number(payload.sub) : payload.id,
       email: payload.email,
-      roles: payload.roles || [],
     };
 
     return next();

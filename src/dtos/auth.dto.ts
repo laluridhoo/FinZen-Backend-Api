@@ -1,3 +1,11 @@
+export interface JwtPayload {
+  sub?: string | number;
+  id?: number;
+  email?: string;
+  iat?: number;
+  exp?: number;
+}
+
 /**
  * Data yang dikirim client saat POST /auth/register
  */
